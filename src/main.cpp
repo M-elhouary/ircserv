@@ -1,21 +1,28 @@
-#include "include/Server.hpp"
+#include "Server.hpp"
+#include <iostream>
+#include <cstdlib>
 
+int main(int ac, char **av) {
+    if (ac != 3) {
+        std::cerr << "Usage: ./ircserv <port> <password>" << std::endl;
+        return 1;
+    }
 
+    int port = std::atoi(av[1]);
+    if (port <= 0 || port > 65535) {
+        std::cerr << "Error: Invalid port number" << std::endl;
+        return 1;
+    }
 
-int main(int ac, char **av)
-{
-	if (ac != 3)
-	{
-		std::cout << "Usage ./ircserv <port> <password>" << std::endl;
-		exit(-1);
-	}
-	Server	srv("testing", 10, av[1], av[2]);
-	try
-	{
-		srv.startServer();
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-};
+    std::string password = av[2];
+    if (password.empty()) {
+        std::cerr << "Error: Password cannot be empty" << std::endl;
+        return 1;
+    }
+
+    Server server(port, password);
+    server.init();
+    server.run();
+
+    return 0;
+}
