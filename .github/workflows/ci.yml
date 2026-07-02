@@ -44,7 +44,9 @@ jobs:
           cppcheck \
             --enable=all \
             --error-exitcode=1 \
-            .
+            --suppress=missingIncludeSystem \
+            -I include \
+            src
 
       - name: Check formatting
         run: |
