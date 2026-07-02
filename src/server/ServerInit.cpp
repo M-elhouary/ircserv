@@ -108,10 +108,6 @@ void Server::run() {
     cleanup();
 }
 
-void Server::stop() {
-    running = false;
-}
-
 void Server::cleanup() {
     if (server_sock >= 0) {
         close(server_sock);
