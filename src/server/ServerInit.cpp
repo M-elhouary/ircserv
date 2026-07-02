@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/socket.h>
 #include <arpa/inet.h>
 
 Server::Server(int port, const std::string& password) {
@@ -44,7 +45,7 @@ void Server::setupSocket() {
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_port = htons(port);
 
-    if (bind(server_sock, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+    if (bind(server_sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
         std::cerr << "Error: bind() to port " << port << " failed" << std::endl;
         close(server_sock);
         exit(1);
@@ -72,8 +73,39 @@ void Server::init() {
 
 void Server::run() {
     while (running) {
-      //TODO: poll() loop
+        int ret = poll(&pfds[0], pfds.size(), -1);
+
+        if (ret < 0) {
+            if (errno == EINTR)
+                continue;
+            std::cerr << "Error: poll() failed" << std::endl;
+            break;
+        }
+
+        for (size_t i = 0; i < pfds.size(); i++) {
+            if (pfds[i].revents & POLLIN) {
+                if (pfds[i].fd == server_sock) {
+                    acceptClient(pfds[i].fd);
+                } else {
+                    char buf[512];
+                    int bytes = recv(pfds[i].fd, buf, sizeof(buf), 0);
+                    if (bytes <= 0) {
+                        disconnectClient(pfds[i].fd);
+                        i--;
+                        continue;
+                    }
+                }
+            }
+
+            if (pfds[i].revents & POLLIN) {
+                if (pfds[i].fd == server_sock) {
+                    acceptClient(pfds[i].fd);
+                }
+            }
+        }
     }
+
+    cleanup();
 }
 
 void Server::stop() {

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <cerrno>
 #include <poll.h>
 
 class Server {
@@ -21,6 +22,8 @@ class Server {
     bool running;
     std::vector<struct pollfd> pfds;
 
+    void acceptClient(int server_fd);
+    void disconnectClient(int fd);
     void setupSocket();
     void cleanup();
 };
