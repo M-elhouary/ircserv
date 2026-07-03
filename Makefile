@@ -7,7 +7,9 @@ INCDIR = include
 SRCDIR = src
 
 SRCS = src/main.cpp \
-       src/server/ServerInit.cpp
+       src/server/ServerInit.cpp \
+       src/server/AcceptClient.cpp \
+       src/server/Disconnect.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
