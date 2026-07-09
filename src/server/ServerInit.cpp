@@ -83,6 +83,17 @@ void Server::run() {
     }
 
     for (size_t i = 0; i < pfds.size(); i++) {
+      if (pfds[i].revents == 0)
+        continue;
+
+      if (pfds[i].revents & (POLLHUP | POLLERR | POLLNVAL)) {
+        if (pfds[i].fd != server_sock) {
+          disconnectClient(pfds[i].fd);
+          i--;
+        }
+        continue;
+      }
+
       if (pfds[i].revents & POLLIN) {
         if (pfds[i].fd == server_sock) {
           acceptClient(pfds[i].fd);
@@ -94,12 +105,6 @@ void Server::run() {
             i--;
             continue;
           }
-        }
-      }
-
-      if (pfds[i].revents & POLLIN) {
-        if (pfds[i].fd == server_sock) {
-          acceptClient(pfds[i].fd);
         }
       }
     }
