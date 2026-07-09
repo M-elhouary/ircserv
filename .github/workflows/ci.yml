@@ -1,0 +1,93 @@
+name: IRC CI
+
+on:
+  push:
+    branches:
+      - main
+      - feature/**
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install compiler
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential make g++
+
+      - name: Build project
+        run: |
+          make re
+
+
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt update
+          sudo apt install -y cppcheck clang-format
+
+      - name: Run cppcheck
+        run: |
+          cppcheck \
+            --enable=all \
+            --error-exitcode=1 \
+            --suppress=missingIncludeSystem \
+            -I include \
+            src
+
+      - name: Check formatting
+        run: |
+          find . \
+            \( -name "*.cpp" -o -name "*.hpp" \) \
+            -exec clang-format \
+            --dry-run \
+            --Werror {} +
+
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            build-essential \
+            make \
+            g++ \
+            valgrind \
+            netcat-openbsd
+
+      - name: Build
+        run: |
+          make re
+
+      - name: Parser tests
+        run: |
+          chmod +x tests/parser.sh
+          ./tests/parser.sh
+
+      - name: Integration tests
+        run: |
+          chmod +x tests/integration.sh
+          ./tests/integration.sh
+
+      - name: Valgrind
+        run: |
+          chmod +x tests/valgrind.sh
+          ./tests/valgrind.sh
