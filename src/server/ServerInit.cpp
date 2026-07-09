@@ -31,7 +31,8 @@ void Server::setupSocket() {
     exit(1);
   }
 
-  if (fcntl(server_sock, F_SETFL, O_NONBLOCK) < 0) {
+  int flags = fcntl(server_sock, F_GETFL, 0);
+  if (flags < 0 || fcntl(server_sock, F_SETFL, flags | O_NONBLOCK) < 0) {
     std::cerr << "Error: fcntl() failed" << std::endl;
     close(server_sock);
     exit(1);
@@ -82,6 +83,17 @@ void Server::run() {
     }
 
     for (size_t i = 0; i < pfds.size(); i++) {
+      if (pfds[i].revents == 0)
+        continue;
+
+      if (pfds[i].revents & (POLLHUP | POLLERR | POLLNVAL)) {
+        if (pfds[i].fd != server_sock) {
+          disconnectClient(pfds[i].fd);
+          i--;
+        }
+        continue;
+      }
+
       if (pfds[i].revents & POLLIN) {
         if (pfds[i].fd == server_sock) {
           acceptClient(pfds[i].fd);
@@ -93,12 +105,6 @@ void Server::run() {
             i--;
             continue;
           }
-        }
-      }
-
-      if (pfds[i].revents & POLLIN) {
-        if (pfds[i].fd == server_sock) {
-          acceptClient(pfds[i].fd);
         }
       }
     }
