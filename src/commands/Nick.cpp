@@ -44,4 +44,23 @@ void nick::handleNick(Client &client, IRCMessage &msg, Server &server)
         client.sendMessage(":ircserver 433 * :Nickname is already in use\r\n");
         return;
     }
+    if(!client.getAutenticated())
+    {
+        client.sendMessage(":ircserver 451 * :You have not registered\r\n");
+        return;
+    }
+    if(!client.isRegistred())
+    {
+        client.setNickName(msg.params[0]);
+        client.setNickNameReceived(true);
+        if(client.getNickName().empty() || client.getUserName().empty())
+            return;
+        client.setRegistred(true);
+        client.sendMessage(":ircserver 001 " + client.getNickName() + " :Welcome to the IRC server\r\n");
+    }
+    else
+    {
+        client.setNickName(msg.params[0]);
+        client.sendMessage(":ircserver 001 " + client.getNickName() + " :Your nickname has been changed\r\n");
+    }
 }
