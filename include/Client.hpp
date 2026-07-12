@@ -13,7 +13,7 @@ class Client {
         int         _fd;
         std::string _nickname;
         std::string _username;
-        bool        _authenticates;
+        bool        _authenticated;
         bool        _nicknameReceived;
         bool        _registred;
 
@@ -25,10 +25,12 @@ class Client {
         void setAutenticated(bool _authenticate);
         void setNickNameReceived(bool _nicknameReceived);
         void setRegistred(bool _registred);
+        bool getAutenticated();
         std::string getNickName();
         std::string getUserName();
         int getFd() const;
         bool isRegistred() const;
+        void sendMessage(std::string message);
 };
 
 
