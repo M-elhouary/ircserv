@@ -18,7 +18,8 @@ void Server::acceptClient(int server_fd) {
     return;
   }
 
-  if (fcntl(client_fd, F_SETFL, O_NONBLOCK) < 0) {
+  int flags = fcntl(client_fd, F_GETFL, 0);
+  if (flags < 0 || fcntl(client_fd, F_SETFL, flags | O_NONBLOCK) < 0) {
     std::cerr << "Error: fcntl() on client failed" << std::endl;
     close(client_fd);
     return;
