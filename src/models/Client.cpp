@@ -55,7 +55,7 @@ bool Client::isRegistred() const
 
 void Client::sendMessage(std::string messgae)
 {
-
+    (void) messgae;
 }
 Client::~Client() {}
 
