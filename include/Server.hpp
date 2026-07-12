@@ -23,6 +23,7 @@ public:
   void init();
   void run();
   const std::string &getPassword() const;
+  std::map<int, Client *> &getClients();
 
 private:
   int port;
