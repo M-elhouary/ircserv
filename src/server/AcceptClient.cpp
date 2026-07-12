@@ -31,5 +31,7 @@ void Server::acceptClient(int server_fd) {
   pfd.revents = 0;
   pfds.push_back(pfd);
 
+  clients[client_fd] = new Client(client_fd);
+
   std::cout << "New client connected (fd = " << client_fd << ")" << std::endl;
 }
