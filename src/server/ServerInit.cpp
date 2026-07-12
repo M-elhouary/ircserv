@@ -1,11 +1,4 @@
-#include "Server.hpp"
-#include <arpa/inet.h>
-#include <cstdlib>
-#include <cstring>
-#include <fcntl.h>
-#include <iostream>
-#include <sys/socket.h>
-#include <unistd.h>
+#include "ircserver.hpp"
 
 Server::Server(int port, const std::string &password) {
   this->port = port;
