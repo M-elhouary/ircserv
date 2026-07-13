@@ -39,13 +39,13 @@ void nick::handleNick(Client &client, IRCMessage &msg, Server &server)
         return;
     }
 
-    if(!isValidNickName(msg.params[0]))
+    if(!nick::isValidNickName(msg.params[0]))
     {
         client.sendMessage(":ircserver 432 * : Erroneous nickname\r\n");
         return;
     }
 
-    if(isAlreadytaken(msg.params[0], server))
+    if(nick::isAlreadytaken(msg.params[0], server))
     {
         client.sendMessage(":ircserver 433 * :Nickname is already in use\r\n");
         return;
