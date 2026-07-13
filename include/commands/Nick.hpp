@@ -8,9 +8,9 @@
 class nick
 {
     public:
-        void handleNick(Client &client, IRCMessage &msg, Server &server);
-        bool isValidNickName(std::string nickanme);
-        bool isAlreadytaken(std::string nickname, Server &server);
+        void static  handleNick(Client &client, IRCMessage &msg, Server &server);
+        bool static  isValidNickName(std::string nickanme);
+        bool static isAlreadytaken(std::string nickname, Server &server);
 };
 
 #endif
