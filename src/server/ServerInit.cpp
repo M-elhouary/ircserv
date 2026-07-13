@@ -1,11 +1,4 @@
-#include "Server.hpp"
-#include <arpa/inet.h>
-#include <cstdlib>
-#include <cstring>
-#include <fcntl.h>
-#include <iostream>
-#include <sys/socket.h>
-#include <unistd.h>
+#include "ircserver.hpp"
 
 Server::Server(int port, const std::string &password) {
   this->port = port;
@@ -98,10 +91,8 @@ void Server::run() {
         if (pfds[i].fd == server_sock) {
           acceptClient(pfds[i].fd);
         } else {
-          char buf[512];
-          int bytes = recv(pfds[i].fd, buf, sizeof(buf), 0);
-          if (bytes <= 0) {
-            disconnectClient(pfds[i].fd);
+          bool disconnected = handleClientData(pfds[i].fd);
+          if (disconnected) {
             i--;
             continue;
           }
@@ -114,6 +105,13 @@ void Server::run() {
 }
 
 void Server::cleanup() {
+  for (std::map<int, Client *>::iterator it = clients.begin();
+       it != clients.end(); ++it) {
+    close(it->first);
+    delete it->second;
+  }
+  clients.clear();
+
   if (server_sock >= 0) {
     close(server_sock);
     server_sock = -1;

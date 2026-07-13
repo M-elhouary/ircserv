@@ -12,6 +12,7 @@ SRCS = src/main.cpp \
        src/server/Disconnect.cpp \
        src/server/PollLoop.cpp \
        src/server/Shutdown.cpp \
+       src/server/Server.cpp \
        src/commands/Invite.cpp \
        src/commands/Join.cpp \
        src/commands/Kick.cpp \

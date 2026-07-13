@@ -1,12 +1,10 @@
-// #ifndef PASS_HPP
-// #define PASS_HPP
+#ifndef PASS_HPP
+# define PASS_HPP
 
-// #include "Command.hpp"
+# include "../Client.hpp"
+# include "../Parser.hpp"
+# include "../Server.hpp"
 
-// class Pass : public Command 
-// {   
-//     void execute(const std::vector<std::string>& args);
-// };
+void handlePass(Client &client, IRCMessage &msg, Server &server);
 
-
-// #endif // PASS_HPP
+#endif // PASS_HPP
