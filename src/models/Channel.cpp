@@ -12,32 +12,27 @@ Channel::Channel(std::string channelName)
 
 Channel::~Channel() {};
 
+// getters
 std::string Channel::getName() const
 {
     return _channelName;
-};
-
-// getters
+};   
 std::vector<Client *> &Channel::getMembers()
 {
     return _clients;
 }
-
 std::vector<Client *> &Channel::getOperators()
 {
     return _operators;
 }
-
 std::vector<Client *> &Channel::getInviteList()
 {
     return _inviteList;
 }
-
 std::string Channel::getTopic() const
 {
     return _topic;
 }
-
 std::string Channel::getPassword() const
 {
     return _password;
@@ -75,29 +70,66 @@ void Channel::addClient(Client *client)
     _clients.push_back(client);
 };
 
-void Channel::removeClient(Client *client)
-{
-    (void)client;
-};
-
-bool Channel::isClientInChannel(Client *client) const
-{
-    (void)client;
-    return false;
-};
-
 void Channel::addOperator(Client *client)
 {
     _operators.push_back(client);
 };
 
+
+    void Channel::removeClient(Client *client)
+    {
+        for (size_t i = 0; i < _clients.size(); i++)
+        {
+            if (_clients[i] == client)
+            {
+                _clients.erase(_clients.begin() + i);
+                break;
+            }
+        }
+    };
+
 void Channel::removeOperator(Client *client)
 {
-    (void)client;
+    for (size_t i = 0; i < _operators.size(); i++)
+    {
+        if(_operators[i] == client)
+            {
+                _operators.erase(_operators.begin() + i);
+                break;
+            }
+    }
+    
+};
+
+bool Channel::isClientInChannel(Client *client) const
+{
+    for (size_t i = 0; i < _clients.size(); i++)
+    {
+        if(_clients[i] == client)
+            return true; 
+    }
+    return false;
 };
 
 bool Channel::isOperator(Client *client) const
 {
-    (void)client;
+
+    for (size_t i = 0; i < _operators.size(); i++)
+    {
+        if(_operators[i] == client)
+            return true;
+    }
     return false;
 };
+
+
+
+bool Channel::isInviteOnly() const
+{
+    return _inviteOnly;
+}
+
+bool Channel::isTopicRestricted() const
+{
+    return _topicRestricted;
+}
