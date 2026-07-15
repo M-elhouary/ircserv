@@ -14,6 +14,7 @@ class Client {
         bool        _authenticated;
         bool        _nicknameReceived;
         bool        _registred;
+        bool        _welcomeSent;
 
     public:
         Client(int fd);
@@ -23,6 +24,8 @@ class Client {
         void setAutenticated(bool _authenticate);
         void setNickNameReceived(bool _nicknameReceived);
         void setRegistred(bool _registred);
+        bool getWelcomeSent() const;
+        void setWelcomeSent(bool value);
         bool getAutenticated();
         std::string getNickName();
         std::string getUserName();

@@ -1,6 +1,15 @@
 #include "ircserver.hpp"
 
-Client::Client(int fd) : _fd(fd), _nickname(""), _username(""), _authenticated(false), _nicknameReceived(false), _registred(false) {}
+Client::Client(int fd)
+ : _fd(fd), _nickname(""), 
+ _username(""), 
+ _authenticated(false),
+  _nicknameReceived(false), 
+  _registred(false),
+   _welcomeSent(false) 
+{
+    
+}
 
 int Client::getFd() const
 {
@@ -21,6 +30,16 @@ std::string Client::getUserName()
 bool Client::getAutenticated()
 {
     return this->_authenticated;
+}
+
+bool Client::getWelcomeSent() const
+{
+    return this->_welcomeSent;
+}
+
+void Client::setWelcomeSent(bool value)
+{
+    this->_welcomeSent = value;
 }
 
 void Client::setNickName(const std::string nickname)

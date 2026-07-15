@@ -23,6 +23,7 @@
 #include "commands/Privmsg.hpp"
 #include "commands/Topic.hpp"
 #include "commands/User.hpp"
+#include "commands/Registration.hpp"
 
 #include "utils/Colors.hpp"
 #include "utils/NumericReplies.hpp"
