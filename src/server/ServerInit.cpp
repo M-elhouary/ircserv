@@ -1,14 +1,5 @@
 #include "ircserver.hpp"
 
-Server::Server(int port, const std::string &password) {
-  this->port = port;
-  this->password = password;
-  server_sock = -1;
-  running = false;
-}
-
-Server::~Server() { cleanup(); }
-
 void Server::setupSocket() {
   server_sock = socket(AF_INET, SOCK_STREAM, 0);
   if (server_sock < 0) {
@@ -102,19 +93,4 @@ void Server::run() {
   }
 
   cleanup();
-}
-
-void Server::cleanup() {
-  for (std::map<int, Client *>::iterator it = clients.begin();
-       it != clients.end(); ++it) {
-    close(it->first);
-    delete it->second;
-  }
-  clients.clear();
-
-  if (server_sock >= 0) {
-    close(server_sock);
-    server_sock = -1;
-  }
-  pfds.clear();
 }

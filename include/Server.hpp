@@ -33,6 +33,9 @@ private:
   std::vector<struct pollfd> pfds;
   std::map<int, Client *> clients;
 
+  Server(const Server &other);
+  Server &operator=(const Server &other);
+
   void acceptClient(int server_fd);
   void disconnectClient(int fd);
 

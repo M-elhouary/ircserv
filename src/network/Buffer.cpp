@@ -1,5 +1,4 @@
-#include "Server.hpp"
-#include <iostream>
+#include "ircserver.hpp"
 
 void Server::processClientBuffer(Client *client) {
   std::string &buffer = client->getRecvBufferRef();
@@ -12,6 +11,7 @@ void Server::processClientBuffer(Client *client) {
     if (line.empty())
       continue;
 
-    std::cout << "[fd=" << client->getFd() << "] " << line << std::endl;
+    std::cout << "[DBUG]:[fd=" << client->getFd() << "] " << line << std::endl;
+    dispatch(*client, line, *this);
   }
 }
