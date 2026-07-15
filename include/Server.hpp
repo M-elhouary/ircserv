@@ -13,6 +13,7 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <unistd.h>
+#include "Channel.hpp"
 #include "Client.hpp"
 
 class Server {
@@ -24,6 +25,10 @@ public:
   void run();
   const std::string &getPassword() const;
   std::map<int, Client *> &getClients();
+  Channel *getChannel(const std::string &name);
+  Channel *createChannel(const std::string &name, Client *creator);
+  void removeChannel(const std::string &name);
+  std::map<std::string, Channel *> &getChannels();
 
 private:
   int port;
@@ -32,6 +37,7 @@ private:
   bool running;
   std::vector<struct pollfd> pfds;
   std::map<int, Client *> clients;
+  std::map<std::string, Channel *> channels;
 
   Server(const Server &other);
   Server &operator=(const Server &other);
