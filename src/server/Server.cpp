@@ -6,3 +6,5 @@ const std::string &Server::getPassword() const
 }
 
 std::map<int, Client *> &Server::getClients() { return clients; }
+
+std::map<std::string, Channel *> &Server::getChannels() { return channels; }

@@ -14,6 +14,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include "Client.hpp"
+#include "Channel.hpp"
 
 class Server {
 public:
@@ -24,6 +25,7 @@ public:
   void run();
   const std::string &getPassword() const;
   std::map<int, Client *> &getClients();
+  std::map<std::string, Channel *> &getChannels();
 
 private:
   int port;
@@ -32,6 +34,7 @@ private:
   bool running;
   std::vector<struct pollfd> pfds;
   std::map<int, Client *> clients;
+  std::map<std::string, Channel *> channels;
 
   void acceptClient(int server_fd);
   void disconnectClient(int fd);

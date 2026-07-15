@@ -13,7 +13,7 @@ void Parser::stripCRLF(std::string &line)
 void Parser::extractPrefix(const std::string &line, IRCMessage &msg,
                            size_t &pos)
 {
-  if (line[pos] == ':')
+  if (pos < line.size() && line[pos] == ':')
   {
     size_t spacePos = line.find(' ', pos);
 
@@ -34,9 +34,9 @@ void Parser::extractCommand(const std::string &line, IRCMessage &msg,
                             size_t &pos)
 {
 
-  if (pos != 0 && !line.empty())
+  if (pos < line.size())
   {
-    size_t spacePos = line.find(' ');
+    size_t spacePos = line.find(' ', pos);
     if (spacePos != std::string::npos)
     {
 

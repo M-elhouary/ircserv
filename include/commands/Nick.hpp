@@ -7,10 +7,10 @@
 
 class nick
 {
-    public:
-        void static  handleNick(Client &client, IRCMessage &msg, Server &server);
-        bool static  isValidNickName(std::string nickanme);
-        bool static isAlreadytaken(std::string nickname, Server &server);
+public:
+    void static handleNick(Client &client, IRCMessage &msg, Server &server);
+    bool static isValidNickName(std::string nickanme);
+    bool static isAlreadytaken(std::string nickname, Server &server, Client &client);
 };
 
 #endif
