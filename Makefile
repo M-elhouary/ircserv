@@ -22,6 +22,7 @@ SRCS = src/main.cpp \
        src/commands/Privmsg.cpp \
        src/commands/Topic.cpp \
        src/commands/User.cpp \
+       src/commands/Registration.cpp \
        src/models/Channel.cpp \
        src/models/Client.cpp \
        src/network/Buffer.cpp \

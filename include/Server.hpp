@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include "Channel.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 
 class Server {
 public:

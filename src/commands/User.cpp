@@ -12,11 +12,7 @@ void handleUser(Client &client, IRCMessage &msg, Server &server)
         return ;
     }
 
-    if(client.isRegistred())
-    {
-        client.sendMessage(":ircserv 462 * :You may not reregister\r\n");
-        return ;
-    }
+    tryCompleteRegistration(client);
 
     if(msg.params.empty())
     {
@@ -26,6 +22,8 @@ void handleUser(Client &client, IRCMessage &msg, Server &server)
 
     client.setUserName(msg.params[0]);
     client.setRegistred(true);
+    tryCompleteRegistration(client);
+
 
     if(client.isRegistred())
     {

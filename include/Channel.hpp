@@ -17,7 +17,8 @@ private:
     std::string _password;             // channel key
     int _userLimit;                    // max users (0 = no limit)
     bool _inviteOnly;                  // invite-only mode
-    bool _topicRestricted;             // only operators change topic
+    bool _topicRestricted; 
+    bool _isInvited;            // only operators change topic
 public:
     Channel(std::string _channelName);
     ~Channel();
@@ -41,6 +42,7 @@ public:
     bool isClientInChannel(Client *client) const;
     bool isInviteOnly() const;
     bool isTopicRestricted() const;
+    bool isInveted();
 };
 
 #endif // CHANNEL_HPP

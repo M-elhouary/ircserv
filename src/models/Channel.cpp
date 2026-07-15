@@ -133,3 +133,8 @@ bool Channel::isTopicRestricted() const
 {
     return _topicRestricted;
 }
+
+bool Channel::isInveted()
+{
+    return _isInvited;
+}
