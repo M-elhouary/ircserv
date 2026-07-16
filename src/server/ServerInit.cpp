@@ -87,6 +87,23 @@ void Server::run() {
             i--;
             continue;
           }
+          std::map<int, Client *>::iterator sit = clients.find(pfds[i].fd);
+          if (sit != clients.end() && sit->second->hasPendingSend())
+            pfds[i].events |= POLLOUT;
+        }
+      }
+
+      if (pfds[i].revents & POLLOUT) {
+        std::map<int, Client *>::iterator it = clients.find(pfds[i].fd);
+        if (it != clients.end()) {
+          int send_ret = it->second->flushSendBuffer();
+          if (send_ret <= 0) {
+            disconnectClient(pfds[i].fd);
+            i--;
+            continue;
+          }
+          if (!it->second->hasPendingSend())
+            pfds[i].events &= ~POLLOUT;
         }
       }
     }

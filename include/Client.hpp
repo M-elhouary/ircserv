@@ -9,6 +9,7 @@ class Client {
     private:
         int         _fd;
         std::string recv_buffer;
+        std::string sendBuffer;
         std::string _nickname;
         std::string _username;
         bool        _authenticated;
@@ -38,7 +39,9 @@ class Client {
         void consumeFromRecvBuffer(size_t n);
 
         bool isRegistred() const;
-        void sendMessage(std::string message);
+        void sendMessage(const std::string &message);
+        bool hasPendingSend() const;
+        int flushSendBuffer();
 };
 
 #endif
