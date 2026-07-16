@@ -18,7 +18,7 @@ private:
     int _userLimit;                    // max users (0 = no limit)
     bool _inviteOnly;                  // invite-only mode
     bool _topicRestricted; 
-    bool _isInvited;            // only operators change topic
+    bool _isClientInvited;            // only operators change topic
 public:
     Channel(std::string _channelName);
     ~Channel();
@@ -27,12 +27,16 @@ public:
     void addOperator(Client *client);
     void removeClient(Client *client);
     void removeOperator(Client *client);
+
+
     std::vector<Client *> &getMembers();
     std::vector<Client *> &getOperators();
     std::vector<Client *> &getInviteList();
+    std::vector<Client *> &getClientsChannel();
     std::string getTopic() const;
     std::string getPassword() const;
     int getUserLimit() const;
+
     void setTopic(const std::string &topic);
     void setPassword(const std::string &password);
     void setUserLimit(int limit);
@@ -40,9 +44,10 @@ public:
     void setTopicRestricted(bool value);
     bool isOperator(Client *client) const;
     bool isClientInChannel(Client *client) const;
+
     bool isInviteOnly() const;
     bool isTopicRestricted() const;
-    bool isInveted();
+    bool isClientInvited(Client *client);
 };
 
-#endif // CHANNEL_HPP
+#endif // CHANNEL_HPP   
