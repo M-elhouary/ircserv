@@ -5,6 +5,7 @@
 #include <poll.h>
 #include <string>
 #include <vector>
+#include <cstdio>
 
 #include "Channel.hpp"
 #include "Client.hpp"

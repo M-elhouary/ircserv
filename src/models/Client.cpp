@@ -88,6 +88,7 @@ bool Client::hasPendingSend() const
 
 int Client::flushSendBuffer()
 {
+    std::cout << "Sending message to client " << _fd << ": " << sendBuffer << std::endl;
     int ret = send(_fd, sendBuffer.c_str(), sendBuffer.size(), 0);
     if (ret > 0) {
         sendBuffer.erase(0, ret);

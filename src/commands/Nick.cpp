@@ -50,6 +50,7 @@ void nick::handleNick(Client &client, IRCMessage &msg, Server &server)
 
     client.setNickName(msg.params[0]);
     client.setNickNameReceived(true);
+    // printf("Nickname changed to %s\n", msg.params[0].c_str());
     tryCompleteRegistration(client);
     
 }
