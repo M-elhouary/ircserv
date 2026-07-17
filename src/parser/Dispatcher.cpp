@@ -11,6 +11,8 @@ void dispatch(Client &client, const std::string &line, Server &server)
         nick::handleNick(client, msg, server);
     else if (msg.command == "USER")
         handleUser(client, msg, server);
+    else if (msg.command == "JOIN")
+        handleJoin(client, msg, server);
     else
         client.sendMessage(":ircserv 421 * :Unknown command\r\n");
 }

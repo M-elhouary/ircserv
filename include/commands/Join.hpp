@@ -6,6 +6,7 @@
 # include "../Client.hpp"
 # include "../Parser.hpp" 
 # include "../Server.hpp"
+# include "../Channel.hpp"
 
 
 void handleJoin(Client &client, IRCMessage &msg, Server &server);

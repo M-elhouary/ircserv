@@ -6,6 +6,7 @@ Channel::Channel(std::string channelName)
     _topic = "";    // topic mean the subject of the channel
     _password = ""; // channel key
     _userLimit = 0;
+    _isClientInvited = false;
     _inviteOnly = false;      // for invite-only channels
     _topicRestricted = false; // for channels where only operators can change the topic
 };
@@ -16,7 +17,7 @@ Channel::~Channel() {};
 std::string Channel::getName() const
 {
     return _channelName;
-};   
+};
 std::vector<Client *> &Channel::getMembers()
 {
     return _clients;
@@ -42,8 +43,14 @@ int Channel::getUserLimit() const
     return _userLimit;
 }
 
+
+std::vector<Client *> &Channel::getClientsChannel()
+{
+    return _clients;
+}
+
 // setters
-void Channel::setTopic(const std::string &topic)    
+void Channel::setTopic(const std::string &topic)
 {
     _topic = topic;
 }
@@ -64,7 +71,6 @@ void Channel::setTopicRestricted(bool value)
     _topicRestricted = value;
 }
 
-
 void Channel::addClient(Client *client)
 {
     _clients.push_back(client);
@@ -75,38 +81,36 @@ void Channel::addOperator(Client *client)
     _operators.push_back(client);
 };
 
-
-    void Channel::removeClient(Client *client)
+void Channel::removeClient(Client *client)
+{
+    for (size_t i = 0; i < _clients.size(); i++)
     {
-        for (size_t i = 0; i < _clients.size(); i++)
+        if (_clients[i] == client)
         {
-            if (_clients[i] == client)
-            {
-                _clients.erase(_clients.begin() + i);
-                break;
-            }
+            _clients.erase(_clients.begin() + i);
+            break;
         }
-    };
+    }
+};
 
 void Channel::removeOperator(Client *client)
 {
     for (size_t i = 0; i < _operators.size(); i++)
     {
-        if(_operators[i] == client)
-            {
-                _operators.erase(_operators.begin() + i);
-                break;
-            }
+        if (_operators[i] == client)
+        {
+            _operators.erase(_operators.begin() + i);
+            break;
+        }
     }
-    
 };
 
 bool Channel::isClientInChannel(Client *client) const
 {
     for (size_t i = 0; i < _clients.size(); i++)
     {
-        if(_clients[i] == client)
-            return true; 
+        if (_clients[i] == client)
+            return true;
     }
     return false;
 };
@@ -116,13 +120,11 @@ bool Channel::isOperator(Client *client) const
 
     for (size_t i = 0; i < _operators.size(); i++)
     {
-        if(_operators[i] == client)
+        if (_operators[i] == client)
             return true;
     }
     return false;
 };
-
-
 
 bool Channel::isInviteOnly() const
 {
@@ -134,7 +136,12 @@ bool Channel::isTopicRestricted() const
     return _topicRestricted;
 }
 
-bool Channel::isInveted()
+bool Channel::isClientInvited(Client *client)
 {
-    return _isInvited;
+    for(size_t i = 0; i < _inviteList.size(); i++)
+    {
+        if (_inviteList[i] == client)
+            return true;
+    }   
+    return false;
 }
