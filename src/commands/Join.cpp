@@ -14,7 +14,6 @@ bool ChannelValidationCheck(Client &client, IRCMessage &msg)
         client.sendMessage(":ircserv 461 * :Not enough parameters\r\n");
         return false;
     }
-
     if (msg.params[0].empty() || msg.params[0][0] != '#')
     {
         client.sendMessage("ircserv : the Channel name shoulde be starte by '#' ");
