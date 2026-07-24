@@ -25,8 +25,6 @@ bool Server::handleClientData(int fd) {
   buf[bytes] = '\0';
   client->appendToRecvBuffer(std::string(buf, static_cast<size_t>(bytes)));
 
-  std::cout << "[fd=" << fd << "] buffer: " << client->getRecvBuffer() << std::endl;
-
   if (client->getRecvBuffer().size() > MAX_RECV_BUFFER) {
     std::cerr << "Client fd=" << fd
               << " exceeded max receive buffer, disconnecting" << std::endl;

@@ -5,10 +5,12 @@
 #include <poll.h>
 #include <string>
 #include <vector>
+#include <cstdio>
 
 #include "Channel.hpp"
 #include "Client.hpp"
 #include "Command.hpp"
+#include "Dispatcher.hpp"
 #include "Parser.hpp"
 #include "Reply.hpp"
 #include "Server.hpp"
