@@ -145,3 +145,14 @@ bool Channel::isClientInvited(Client *client)
     }   
     return false;
 }
+
+void Channel::broadcast(const std::string &message, Client *sender)
+{
+    for (size_t i = 0; i < _clients.size(); i++)
+    {
+        if (_clients[i] != sender)
+        {
+            _clients[i]->sendMessage(message);
+        }
+    }
+}

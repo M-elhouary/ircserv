@@ -27,6 +27,7 @@ public:
     void addOperator(Client *client);
     void removeClient(Client *client);
     void removeOperator(Client *client);
+    void broadcast(const std::string &message, Client *sender);
 
 
     std::vector<Client *> &getMembers();
