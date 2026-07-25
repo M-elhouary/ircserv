@@ -23,7 +23,6 @@ bool ChannelValidationCheck(Client &client, IRCMessage &msg)
     return true;
 }
 
-
 bool haslimitUser(Channel *channel)
 {
     std::vector<Client *> ClientInChannel = channel->getMembers();
@@ -50,14 +49,13 @@ bool PasswordCheck(Channel *channel, IRCMessage &msg)
     return true;
 }
 
-
 bool isClientInvited(Channel *channel, Client &client)
 {
     if (channel->isInviteOnly())
     {
         if (!channel->isClientInvited(&client))
         {
-           return false;
+            return false;
         }
     }
     return true;
@@ -81,6 +79,11 @@ void handleJoin(Client &client, IRCMessage &msg, Server &server)
         channels[newChannel->getName()] = newChannel;
 
         client.sendMessage(":ircserv  JOIN " + newChannel->getName() + "\r\n");
+        // 353 RPL_NAMREPLY — first member is operator, prefix with @
+        client.sendMessage(":ircserv 353 " + client.getNickName() + " = " + newChannel->getName() + " :@" + client.getNickName() + "\r\n");
+
+        // 366 RPL_ENDOFNAMES
+        client.sendMessage(":ircserv 366 " + client.getNickName() + " " + newChannel->getName() + " :End of /NAMES list\r\n");
         return;
     }
 
@@ -93,19 +96,19 @@ void handleJoin(Client &client, IRCMessage &msg, Server &server)
         return;
     }
 
-    if(haslimitUser(channel))
+    if (haslimitUser(channel))
     {
         client.sendMessage(":ircserv 471 *: cannot join channel has limit user");
         return;
     }
 
-    if(!isClientInvited(channel, client))
+    if (!isClientInvited(channel, client))
     {
         client.sendMessage(":ircserv 473 *: cannot join channel has invite only");
         return;
     }
 
-    if(!PasswordCheck(channel, msg))
+    if (!PasswordCheck(channel, msg))
     {
         client.sendMessage("ircserv 475 * : the password is incorrect");
         return;
@@ -113,4 +116,23 @@ void handleJoin(Client &client, IRCMessage &msg, Server &server)
 
     channel->addClient(&client);
     client.sendMessage(":ircserv  JOIN " + channel->getName() + "\r\n");
+    // 332 RPL_TOPIC — send topic if channel has one
+     if (!channel->getTopic().empty())
+        client.sendMessage(":ircserv 332 " + client.getNickName() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");
+
+    // 353 RPL_NAMREPLY — build member list, @ prefix for operators
+    std::string names = "";
+    std::vector<Client *> members = channel->getMembers();
+    for (size_t i = 0; i < members.size(); i++)
+    {
+        if (channel->isOperator(members[i]->getNickName()))
+            names += "@";
+        names += members[i]->getNickName();
+        if (i < members.size() - 1)
+            names += " ";
+    }
+    client.sendMessage(":ircserv 353 " + client.getNickName() + " = " + channel->getName() + " :" + names + "\r\n");
+
+    // 366 RPL_ENDOFNAMES
+    client.sendMessage(":ircserv 366 " + client.getNickName() + " " + channel->getName() + " :End of /NAMES list\r\n");
 }

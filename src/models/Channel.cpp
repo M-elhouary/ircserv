@@ -81,11 +81,17 @@ void Channel::addOperator(Client *client)
     _operators.push_back(client);
 };
 
-void Channel::removeClient(Client *client)
+void Channel::addToInvitListe(Client *client)
+{
+    _inviteList.push_back(client);
+}
+
+
+void Channel::removeClient(std::string nickname)
 {
     for (size_t i = 0; i < _clients.size(); i++)
     {
-        if (_clients[i] == client)
+        if (_clients[i]->getNickName() == nickname)
         {
             _clients.erase(_clients.begin() + i);
             break;
@@ -93,11 +99,12 @@ void Channel::removeClient(Client *client)
     }
 };
 
-void Channel::removeOperator(Client *client)
+
+void Channel::removeOperator(std::string nickname)
 {
     for (size_t i = 0; i < _operators.size(); i++)
     {
-        if (_operators[i] == client)
+        if (_operators[i]->getNickName() == nickname)
         {
             _operators.erase(_operators.begin() + i);
             break;
@@ -115,12 +122,23 @@ bool Channel::isClientInChannel(Client *client) const
     return false;
 };
 
-bool Channel::isOperator(Client *client) const
+
+bool Channel::isAMemberInChannel(std::string nickname) const
+{
+    for (size_t i = 0; i < _clients.size(); i++)
+    {
+        if (_clients[i]->getNickName() == nickname)
+            return true;
+    }
+    return false;
+};
+
+bool Channel::isOperator(std::string nickname) const
 {
 
     for (size_t i = 0; i < _operators.size(); i++)
     {
-        if (_operators[i] == client)
+        if (_operators[i]->getNickName() == nickname)
             return true;
     }
     return false;

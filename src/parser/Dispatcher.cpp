@@ -15,6 +15,14 @@ void dispatch(Client &client, const std::string &line, Server &server)
         handleJoin(client, msg, server);
     else if (msg.command == "PRIVMSG")
         handlePrivmsg(client, msg, server);
+    else if (msg.command == "KICK")
+        handleKick(client, msg, server);
+    else if (msg.command == "INVITE")
+        handleInvite(client, msg, server);
+    else if (msg.command == "TOPIC")
+        handleTopic(client, msg, server);
+    else if (msg.command == "MODE")
+        handleMode(client, msg, server);
     else
         client.sendMessage(":ircserv 421 * :Unknown command\r\n");
 }
