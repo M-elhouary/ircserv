@@ -1,7 +1,6 @@
 #ifndef IRCSERVER_HPP
 #define IRCSERVER_HPP
 
-#include <cerrno>
 #include <poll.h>
 #include <string>
 #include <vector>

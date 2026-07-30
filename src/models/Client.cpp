@@ -1,5 +1,4 @@
-#include "ircserver.hpp"
-#include <cerrno>
+#include "../../include/ircserver.hpp"
 #include <sys/socket.h>
 
 Client::Client(int fd)
@@ -89,15 +88,14 @@ bool Client::hasPendingSend() const
 int Client::flushSendBuffer()
 {
     std::cout << "[DBUG]:[fd=" << _fd << "] sendBuffer: " << sendBuffer << std::endl;
+    if (sendBuffer.empty())
+        return 0;
     int ret = send(_fd, sendBuffer.c_str(), sendBuffer.size(), 0);
     if (ret > 0) {
         sendBuffer.erase(0, ret);
-    } else if (ret < 0) {
-        if (errno != EAGAIN && errno != EWOULDBLOCK)
-            return -1;
-        return 0;
+        return ret;
     }
-    return ret;
+    return 0;
 }
 
 Client::~Client() {}

@@ -1,4 +1,11 @@
-#include "ircserver.hpp"
+#include "../../include/ircserver.hpp"
+#include <csignal>
+
+volatile sig_atomic_t g_stop_server = 0;
+
+extern "C" void handleShutdownSignal(int) {
+    g_stop_server = 1;
+}
 
 void Server::setupSocket() {
   server_sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -15,8 +22,7 @@ void Server::setupSocket() {
     exit(1);
   }
 
-  int flags = fcntl(server_sock, F_GETFL, 0);
-  if (flags < 0 || fcntl(server_sock, F_SETFL, flags | O_NONBLOCK) < 0) {
+  if (fcntl(server_sock, F_SETFL, O_NONBLOCK) < 0) {
     std::cerr << "Error: fcntl() failed" << std::endl;
     close(server_sock);
     exit(1);
@@ -51,12 +57,15 @@ void Server::setupSocket() {
 }
 
 void Server::init() {
+  signal(SIGPIPE, SIG_IGN);
+  signal(SIGINT, handleShutdownSignal);
+  signal(SIGTERM, handleShutdownSignal);
   setupSocket();
   running = true;
 }
 
 void Server::run() {
-  while (running) {
+  while (running  && !g_stop_server) {
     int ret = poll(&pfds[0], pfds.size(), -1);
 
     if (ret < 0) {
@@ -96,12 +105,7 @@ void Server::run() {
       if (pfds[i].revents & POLLOUT) {
         std::map<int, Client *>::iterator it = clients.find(pfds[i].fd);
         if (it != clients.end()) {
-          int send_ret = it->second->flushSendBuffer();
-          if (send_ret <= 0) {
-            disconnectClient(pfds[i].fd);
-            i--;
-            continue;
-          }
+          it->second->flushSendBuffer();
           if (!it->second->hasPendingSend())
             pfds[i].events &= ~POLLOUT;
         }

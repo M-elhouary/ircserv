@@ -1,4 +1,4 @@
-#include "Server.hpp"
+#include "../../include/Server.hpp"
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <iostream>
@@ -12,14 +12,10 @@ void Server::acceptClient(int server_fd) {
   int client_fd =
       accept(server_fd, reinterpret_cast<sockaddr *>(&client_addr), &addrlen);
 
-  if (client_fd < 0) {
-    if (errno != EAGAIN && errno != EWOULDBLOCK)
-      std::cerr << "Error: accept() failed" << std::endl;
-    return;
-  }
+  if (client_fd < 0)
+        return;
 
-  int flags = fcntl(client_fd, F_GETFL, 0);
-  if (flags < 0 || fcntl(client_fd, F_SETFL, flags | O_NONBLOCK) < 0) {
+  if (fcntl(client_fd, F_SETFL, O_NONBLOCK) < 0) {
     std::cerr << "Error: fcntl() on client failed" << std::endl;
     close(client_fd);
     return;
