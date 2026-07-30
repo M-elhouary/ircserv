@@ -74,7 +74,7 @@ void AddMode(Channel *Channel, Client &client, IRCMessage &msg, Server &server)
         {
             if (msg.params.size() < 3)
             {
-                client.sendMessage("ircserv * 461 : Not enough parameters for +k");
+                client.sendMessage(":ircserv 461 * :Not enough parameters for +k\r\n");
                 return;
             }
             Channel->setPassword(msg.params[2]);
@@ -84,7 +84,7 @@ void AddMode(Channel *Channel, Client &client, IRCMessage &msg, Server &server)
         {
             if (msg.params.size() < 3)
             {
-                client.sendMessage("ircserv * 461 : Not enough parameters for +l");
+                client.sendMessage(":ircserv 461 * :Not enough parameters for +l\r\n");
                 return;
             }
             std::stringstream ss(msg.params[2]);
@@ -97,7 +97,7 @@ void AddMode(Channel *Channel, Client &client, IRCMessage &msg, Server &server)
         {
             if (msg.params.size() < 3)
             {
-                client.sendMessage("ircserv * 461 : Not enough parameters for +o");
+                client.sendMessage(":ircserv 461 * :Not enough parameters for +o\r\n");
                 return;
             }
             std::map<int, Client *> &Clients = server.getClients();
@@ -110,13 +110,13 @@ void AddMode(Channel *Channel, Client &client, IRCMessage &msg, Server &server)
                     return;
                 }
             }
-            client.sendMessage("ircserv * 401 : No such nick/channel");
+            client.sendMessage(":ircserv 401 * :No such nick/channel\r\n");
             return;
         }
         else
         {
-            client.sendMessage("ircserv * 501 : Unknown MODE flag");
-            return;
+client.sendMessage(":ircserv 501 * :Unknown MODE flag\r\n");
+                return;
         }
     }
     
@@ -143,12 +143,12 @@ void DesactiveMode(Channel *Channel, Client &client, IRCMessage &msg)
         {
             if (msg.params.size() < 3)
             {
-                client.sendMessage("ircserv * 461 : Not enough parameters for -k");
+                client.sendMessage(":ircserv 461 * :Not enough parameters for -k\r\n");
                 return;
             }
             if (Channel->getPassword() != msg.params[2])
             {
-                client.sendMessage("ircserv * 475 : Password incorrect");
+                client.sendMessage(":ircserv 475 * :Password incorrect\r\n");
                 return;
             }
             Channel->setPassword("");
@@ -164,7 +164,7 @@ void DesactiveMode(Channel *Channel, Client &client, IRCMessage &msg)
         {
             if (msg.params.size() < 3)
             {
-                client.sendMessage("ircserv * 461 : Not enough parameters for -o");
+                client.sendMessage(":ircserv 461 * :Not enough parameters for -o\r\n");
                 return;
             }
             Channel->removeOperator(msg.params[2]);
@@ -173,8 +173,8 @@ void DesactiveMode(Channel *Channel, Client &client, IRCMessage &msg)
         }
         else
         {
-            client.sendMessage("ircserv * 501 : Unknown MODE flag");
-            return;
+client.sendMessage(":ircserv 501 * :Unknown MODE flag\r\n");
+                return;
         }
     }
     
@@ -196,13 +196,13 @@ void handleMode(Client &client, IRCMessage &msg, Server &server)
     Channel *Channel = server.getChannel(msg.params[0]);
     if (Channel == NULL)
     {
-        client.sendMessage("403 * : this channel doesn't exist\r\n");
+        client.sendMessage(":ircserv 403 * :No such channel\r\n");
         return;
     }
 
     if (!Channel->isClientInChannel(&client))
     {
-        client.sendMessage("404 * the client not exist on this channel\r\n");
+        client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
         return;
     }
 
@@ -216,13 +216,13 @@ void handleMode(Client &client, IRCMessage &msg, Server &server)
     {
         if (!Channel->isOperator(client.getNickName()))
         {
-            client.sendMessage("ircserv * 482 : You're not channel operator ");
+            client.sendMessage(":ircserv 482 * :You're not channel operator\r\n");
             return;
         }
         if (msg.params[1][0] != '+' && msg.params[1][0] != '-')
         {
-            client.sendMessage("ircserv * 501 : Unknown MODE flag");
-            return;
+client.sendMessage(":ircserv 501 * :Unknown MODE flag\r\n");
+                return;
         }
 
         if (msg.params[1][0] == '+')

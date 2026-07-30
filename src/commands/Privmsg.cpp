@@ -26,12 +26,12 @@ void MsgTochannel(Client &client, IRCMessage &msg, Server &server)
     Channel *channel = server.getChannel(msg.params[0]);
     if (channel == NULL)
     {
-        client.sendMessage("403 * : this channel doesn't exist\r\n");
+        client.sendMessage(":ircserv 403 * :No such channel\r\n");
         return;
     }
     if (!channel->isClientInChannel(&client))
     {
-        client.sendMessage("404 * the client not exist on this channel\r\n");
+        client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
         return;
     }
     std::string message = BuildPrivmsgMessage(client, msg.params[0], msg.params[1]);
@@ -51,7 +51,7 @@ void MsgToClient(Client &client, IRCMessage &msg, Server &server)
             return;
         }
     }
-    client.sendMessage("401 * : this client doesn't exist\r\n");
+    client.sendMessage(":ircserv 401 * :No such nick/channel\r\n");
 }
 
 void handlePrivmsg(Client &client, IRCMessage &msg, Server &server)
@@ -59,12 +59,12 @@ void handlePrivmsg(Client &client, IRCMessage &msg, Server &server)
 
     if (client.isRegistred() == false)
     {
-        client.sendMessage("451 :You have not registered\r\n");
-        return;
+        client.sendMessage(":ircserv 451 * :You have not registered\r\n");
+        return; 
     }
     if (msg.params.size() < 2)
     {
-        client.sendMessage("461 PRIVMSG :Not enough parameters\r\n");
+        client.sendMessage(":ircserv 461 * :Not enough parameters\r\n");
         return;
     }
     if(msg.params[0][0] == '#')

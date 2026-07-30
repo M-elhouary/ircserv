@@ -1,25 +1,23 @@
-#include "Server.hpp"
+#include "../../include/Server.hpp"
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <iostream>
+#include <ostream>
 #include <sys/socket.h>
 #include <unistd.h>
 
 void Server::acceptClient(int server_fd) {
   struct sockaddr_in client_addr;
   socklen_t addrlen = sizeof(client_addr);
-
+  
   int client_fd =
-      accept(server_fd, reinterpret_cast<sockaddr *>(&client_addr), &addrlen);
+  accept(server_fd, reinterpret_cast<sockaddr *>(&client_addr), &addrlen);
+  std::cout << client_addr.sin_addr.s_addr << std::endl;  
 
-  if (client_fd < 0) {
-    if (errno != EAGAIN && errno != EWOULDBLOCK)
-      std::cerr << "Error: accept() failed" << std::endl;
-    return;
-  }
+  if (client_fd < 0)
+        return;
 
-  int flags = fcntl(client_fd, F_GETFL, 0);
-  if (flags < 0 || fcntl(client_fd, F_SETFL, flags | O_NONBLOCK) < 0) {
+  if (fcntl(client_fd, F_SETFL, O_NONBLOCK) < 0) {
     std::cerr << "Error: fcntl() on client failed" << std::endl;
     close(client_fd);
     return;
@@ -32,6 +30,8 @@ void Server::acceptClient(int server_fd) {
   pfds.push_back(pfd);
 
   clients[client_fd] = new Client(client_fd);
+  clients[client_fd]->setHostname(client_addr);
+  std::cout << clients[client_fd]->getHostname() << std::endl;
 
   std::cout << "New client connected (fd = " << client_fd << ")" << std::endl;
 }

@@ -1,7 +1,6 @@
 #include "ircserver.hpp"
 
 
-
 void handlePass(Client &client, IRCMessage &msg, Server &server)
 {
     if (client.getAutenticated())

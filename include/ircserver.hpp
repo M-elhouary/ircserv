@@ -1,7 +1,6 @@
 #ifndef IRCSERVER_HPP
 #define IRCSERVER_HPP
 
-#include <cerrno>
 #include <poll.h>
 #include <string>
 #include <vector>
@@ -21,6 +20,7 @@
 #include "commands/Mode.hpp"
 #include "commands/Nick.hpp"
 #include "commands/Pass.hpp"
+#include "commands/Ping.hpp"
 #include "commands/Privmsg.hpp"
 #include "commands/Topic.hpp"
 #include "commands/User.hpp"
