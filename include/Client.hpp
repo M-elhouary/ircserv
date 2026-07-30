@@ -29,6 +29,7 @@ class Client {
         void setHostname(struct sockaddr_in client_addr);
         void setWelcomeSent(bool value);
         bool getWelcomeSent() const;
+        bool getNickNameReceived() const;
         bool getAutenticated();
         std::string getNickName();
         std::string getUserName();

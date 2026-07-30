@@ -43,6 +43,12 @@ std::string Client::getHostname() const
     return this->_hostname;
 }
 
+bool Client::getNickNameReceived() const
+{
+    return this->_nicknameReceived;
+}
+
+
 void Client::setWelcomeSent(bool value)
 {
     this->_welcomeSent = value;
