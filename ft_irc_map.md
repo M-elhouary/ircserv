@@ -21,6 +21,7 @@
 14. [What You Need From Developer 1](#14-what-you-need-from-developer-1)
 15. [Phase Roadmap](#15-phase-roadmap)
 16. [File Structure](#16-file-structure)
+17. [Bonus: IRC Bot](#17-bonus-irc-bot)
 
 ---
 
@@ -1021,6 +1022,200 @@ ft_irc/
 ├── Makefile
 ├── README.md
 └── plan.md
+```
+
+---
+
+## 17. Bonus: IRC Bot
+
+### What is the Bot?
+
+A **separate program** (`ircbot`) that connects to your IRC server as a regular client and responds to user commands.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      IRC SERVER                              │
+│                                                              │
+│   ┌──────────┐    ┌──────────┐    ┌──────────┐              │
+│   │  User 1  │    │  User 2  │    │   BOT    │              │
+│   │  (irssi) │    │   (nc)   │    │(ircbot)  │              │
+│   └────┬─────┘    └────┬─────┘    └────┬─────┘              │
+│        │               │               │                     │
+│        └───────────────┴───────────────┘                     │
+│                        │                                     │
+│                   Server routes                              │
+│                   messages to all                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### How the Bot Works
+
+```
+Bot starts:
+  ./ircbot localhost 6667 password
+
+Bot connects:
+  → socket() → connect() to server
+  → sends: PASS password\r\n
+  → sends: NICK ircbot\r\n
+  → sends: USER ircbot 0 * :IRC Bot\r\n
+  → receives: 001 Welcome
+  → sends: JOIN #general\r\n
+  → enters receive loop
+
+User sends message:
+  :alice!user@host PRIVMSG #general :!help
+
+Bot receives:
+  → parses message
+  → finds !help command
+  → responds: PRIVMSG #general :Available commands: !help, !time, !joke
+```
+
+### Bot Commands
+
+| Command | Response |
+|---------|----------|
+| `!help` | List all available commands |
+| `!time` | Current server time |
+| `!joke` | Random joke |
+| `!info` | Server information |
+| `!users` | List users in channel |
+| `!ping` | Pong! |
+
+### Bot Data Structure
+
+```cpp
+class Bot
+{
+    private:
+        int          _sockfd;        // socket fd
+        std::string  _host;          // server host
+        int          _port;          // server port
+        std::string  _password;      // server password
+        std::string  _nickname;      // bot nickname
+        std::string  _buffer;        // receive buffer
+        bool         _running;       // loop control
+
+    public:
+        Bot(const std::string &host, int port, const std::string &password);
+        ~Bot();
+
+        // connection
+        void connect();              // socket + connect
+        void registerBot();          // PASS + NICK + USER
+        void sendJoin(const std::string &channel);
+
+        // main loop
+        void run();                  // recv loop
+        void processLine(const std::string &line);
+
+        // command handlers
+        void handleHelp(const std::string &channel);
+        void handleTime(const std::string &channel);
+        void handleJoke(const std::string &channel);
+        void handleInfo(const std::string &channel);
+        void handlePing(const std::string &channel);
+
+        // helpers
+        void sendMessage(const std::string &msg);
+        void sendPrivmsg(const std::string &target, const std::string &msg);
+        std::string getCurrentTime();
+};
+```
+
+### Bot File Structure
+
+```
+ft_irc/
+├── src/
+│   └── bot/
+│       ├── Bot.cpp          ← Bot implementation
+│       └── main.cpp         ← Bot entry point
+├── include/
+│   └── Bot.hpp              ← Bot class declaration
+```
+
+### Bot Flow Diagram
+
+```
+./ircbot localhost 6667 password
+          │
+          ▼
+    Bot bot(host, port, pass)
+          │
+          ▼
+    bot.connect()
+    ├── socket(AF_INET, SOCK_STREAM, 0)
+    ├── connect(sockfd, addr, len)
+    └── socket connected!
+          │
+          ▼
+    bot.registerBot()
+    ├── send: PASS password\r\n
+    ├── send: NICK ircbot\r\n
+    └── send: USER ircbot 0 * :IRC Bot\r\n
+          │
+          ▼
+    bot.run()
+    ┌─────────────────────────────────────┐
+    │  while (_running)                    │
+    │  {                                   │
+    │      recv(sockfd, buffer, 1024, 0)   │
+    │      append to _buffer               │
+    │      while (has complete line)        │
+    │      {                               │
+    │          extract line (\r\n)          │
+    │          processLine(line)            │
+    │      }                               │
+    │  }                                   │
+    └─────────────────────────────────────┘
+          │
+          ▼
+    processLine(":alice PRIVMSG #general :!help")
+          │
+          ├── PING? → send PONG
+          ├── 001? → registration complete
+          ├── JOIN? → log user joined
+          └── PRIVMSG?
+              ├── !help → handleHelp()
+              ├── !time → handleTime()
+              ├── !joke → handleJoke()
+              └── !info → handleInfo()
+```
+
+### Bot Makefile Target
+
+```makefile
+# Add to existing Makefile:
+BOT_SRCS = src/bot/main.cpp src/bot/Bot.cpp
+BOT_OBJS = $(BOT_SRCS:.cpp=.o)
+
+bot: $(BOT_OBJS)
+	$(CXX) $(CXXFLAGS) -o ircbot $^
+
+src/bot/%.o: src/bot/%.cpp
+	$(CXX) $(CXXFLAGS) -I$(INCDIR) -c $< -o $@
+```
+
+### Bot Usage
+
+```bash
+# Start server first
+./ircserv 6667 password
+
+# Start bot
+./ircbot localhost 6667 password
+
+# Connect with client
+nc localhost 6667
+PASS password
+NICK alice
+USER alice 0 * :Alice
+JOIN #general
+PRIVMSG #general :!help    ← bot responds
+PRIVMSG #general :!time    ← bot responds
+PRIVMSG #general :!joke    ← bot responds
 ```
 
 ---
