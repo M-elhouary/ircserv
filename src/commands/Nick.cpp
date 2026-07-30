@@ -26,25 +26,25 @@ void nick::handleNick(Client &client, IRCMessage &msg, Server &server)
 {
     if (!client.getAutenticated())
     {
-        client.sendMessage(":ircserver 451 * :You have not registered\r\n");
+        client.sendMessage(":ircserv 451 * :You have not registered\r\n");
         return;
     }
 
     if (msg.params.empty())
     {
-        client.sendMessage(":ircserver 431 * : No nickname given\r\n");
+        client.sendMessage(":ircserv 431 * :No nickname given\r\n");
         return;
     }
 
     if (!nick::isValidNickName(msg.params[0]))
     {
-        client.sendMessage(":ircserver 432 * : Erroneous nickname\r\n");
+        client.sendMessage(":ircserv 432 * :Erroneous nickname\r\n");
         return;
     }
 
     if (nick::isAlreadytaken(msg.params[0], server, client))
     {
-        client.sendMessage(":ircserver 433 * :Nickname is already in use\r\n");
+        client.sendMessage(":ircserv 433 * :Nickname is already in use\r\n");
         return;
     }
 

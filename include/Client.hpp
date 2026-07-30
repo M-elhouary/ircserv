@@ -26,15 +26,15 @@ class Client {
         void setAutenticated(bool _authenticate);
         void setNickNameReceived(bool _nicknameReceived);
         void setRegistred(bool _registred);
-        void set_hostname(struct sockaddr_in client_addr);
-        bool getWelcomeSent() const;
+        void setHostname(struct sockaddr_in client_addr);
         void setWelcomeSent(bool value);
+        bool getWelcomeSent() const;
         bool getAutenticated();
         std::string getNickName();
         std::string getUserName();
 
         int getFd() const;
-        std::string get_hostname() const;
+        std::string getHostname() const;
 
         const std::string &getRecvBuffer() const;
         std::string &getRecvBufferRef();

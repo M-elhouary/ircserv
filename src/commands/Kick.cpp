@@ -31,7 +31,7 @@ void handelTarget(Channel *channel, IRCMessage &msg, Client &client)
     }
     else
     {
-        client.sendMessage("ircserv * 441 : this client doesn't exist on this channel\r\n");
+        client.sendMessage(":ircserv 441 * :Target is not in channel\r\n");
         return;
     }
 }
@@ -42,20 +42,20 @@ void handleKick(Client &client, IRCMessage &msg, Server &server)
     // check valadition of client
     if (!client.isRegistred())
     {
-        client.sendMessage("ircserv * 452 :  you not register ");
+        client.sendMessage(":ircserv 451 * :You have not registered\r\n");
         return;
     }
     // param for cmd
     if (msg.params.size() < 2)
     {
-        client.sendMessage("ircserv * 461 : number of argument not enough");
+        client.sendMessage(":ircserv 461 * :Not enough parameters\r\n");
         return;
     }
 
     Channel *channel = server.getChannel(msg.params[0]);
     if (channel == NULL)
     {
-        client.sendMessage("403 * : this channel doesn't exist\r\n");
+        client.sendMessage(":ircserv 403 * :No such channel\r\n");
         return;
     }
     else
@@ -63,12 +63,12 @@ void handleKick(Client &client, IRCMessage &msg, Server &server)
 
         if (!channel->isClientInChannel(&client))
         {
-            client.sendMessage("404 * the client not exist on this channel\r\n");
+            client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
             return;
         }
         if (!channel->isOperator(client.getNickName()))
         {
-            client.sendMessage("ircserv * 482 : you are not a operator in" + channel->getName() + "channel");
+            client.sendMessage(":ircserv 482 * :You're not channel operator\r\n");
             return;
         }
         // target

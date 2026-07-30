@@ -38,7 +38,7 @@ bool Client::getWelcomeSent() const
     return this->_welcomeSent;
 }
 
-std::string Client::get_hostname() const
+std::string Client::getHostname() const
 {
     return this->_hostname;
 }
@@ -71,7 +71,7 @@ void Client::setRegistred(bool _registred)
     this->_registred = _registred;
 }
 
-void Client::set_hostname(struct sockaddr_in client_addr) {
+void Client::setHostname(struct sockaddr_in client_addr) {
   _hostname = inet_ntoa(client_addr.sin_addr);
 }
 

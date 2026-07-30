@@ -16,7 +16,7 @@ void handleTopic(Client &client, IRCMessage &msg, Server &server)
     // validation of client
     if (!client.isRegistred())
     {
-        client.sendMessage("ircserv * 452 :  you not register ");
+        client.sendMessage(":ircserv 451 * :You have not registered\r\n");
         return;
     }
 
@@ -24,18 +24,18 @@ void handleTopic(Client &client, IRCMessage &msg, Server &server)
     Channel *channel = server.getChannel(msg.params[0]);
     if (channel == NULL)
     {
-        client.sendMessage("403 * : this channel doesn't exist\r\n");
+        client.sendMessage(":ircserv 403 * :No such channel\r\n");
         return;
     }
     if (!channel->isClientInChannel(&client))
     {
-        client.sendMessage("404 * the client not exist on this channel\r\n");
+        client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
         return;
     }
     // if no topic is provided, send the current topic
     if (msg.params.size() == 1)
     {
-        if (!channel->getTopic().empty())
+        if (channel->getTopic().empty())
             client.sendMessage(":ircserv 331 " + client.getNickName() + " " + channel->getName() + " :No topic is set\r\n");
         else
             client.sendMessage(":ircserv 332 " + client.getNickName() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");
@@ -44,7 +44,7 @@ void handleTopic(Client &client, IRCMessage &msg, Server &server)
     // if the channel is topic restricted and the client is not an operator, send an error
     if ((channel->isTopicRestricted() && !channel->isOperator(client.getNickName())))
     {
-        client.sendMessage("482 * :You're not channel operator\r\n");
+        client.sendMessage(":ircserv 482 * :You're not channel operator\r\n");
         return;
     }
     // set the new topic and broadcast it to all clients in the channel
