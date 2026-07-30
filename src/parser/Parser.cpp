@@ -46,6 +46,7 @@ void Parser::extractCommand(const std::string &line, IRCMessage &msg,
     else
     {
       msg.command = line.substr(pos);
+      // std::cout << "Command: " << msg.command << std::endl;
       pos = line.size();
     }
   }

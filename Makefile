@@ -33,9 +33,6 @@ SRCS = src/main.cpp \
        src/network/Socket.cpp \
        src/parser/Dispatcher.cpp \
        src/parser/Parser.cpp \
-       src/replies/Reply.cpp \
-       src/utils/NumericReplies.cpp \
-       src/utils/Utils.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

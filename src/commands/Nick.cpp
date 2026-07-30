@@ -24,11 +24,7 @@ bool nick::isAlreadytaken(std::string nickname, Server &server, Client &client)
 
 void nick::handleNick(Client &client, IRCMessage &msg, Server &server)
 {
-    if (!client.getAutenticated())
-    {
-        client.sendMessage(":ircserv 451 * :You have not registered\r\n");
-        return;
-    }
+
 
     if (msg.params.empty())
     {
