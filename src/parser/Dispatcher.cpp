@@ -23,6 +23,8 @@ void dispatch(Client &client, const std::string &line, Server &server)
         handleTopic(client, msg, server);
     else if (msg.command == "MODE")
         handleMode(client, msg, server);
+    else if (msg.command == "PING")
+        handlePing(client, msg, server);
     else
         client.sendMessage(":ircserv 421 * :Unknown command\r\n");
 }
