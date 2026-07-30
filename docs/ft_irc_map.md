@@ -375,7 +375,8 @@ class Channel
         std::string           getTopic()           const;
         std::string           getPassword()        const;
         int                   getUserLimit()       const;
-        bool                  isInviteOnly()       const;
+        bool                  isInviteOnly()      
+ const;
         bool                  isTopicRestricted()  const;
         std::vector<Client*>& getMembers();
         std::vector<Client*>& getOperators();

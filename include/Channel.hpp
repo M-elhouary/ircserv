@@ -25,8 +25,10 @@ public:
     std::string getName() const;
     void addClient(Client *client);
     void addOperator(Client *client);
-    void removeClient(Client *client);
-    void removeOperator(Client *client);
+    void addToInvitListe(Client *client);
+    void removeClient(std::string nickname);
+    void removeOperator(std::string nickname);
+    void broadcast(const std::string &message, Client *sender);
 
 
     std::vector<Client *> &getMembers();
@@ -42,12 +44,13 @@ public:
     void setUserLimit(int limit);
     void setInviteOnly(bool value);
     void setTopicRestricted(bool value);
-    bool isOperator(Client *client) const;
+    bool isOperator(std::string nickname ) const;
     bool isClientInChannel(Client *client) const;
 
     bool isInviteOnly() const;
     bool isTopicRestricted() const;
     bool isClientInvited(Client *client);
+    bool isAMemberInChannel(std::string nickname) const;
 };
 
 #endif // CHANNEL_HPP   

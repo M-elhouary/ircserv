@@ -1,8 +1,7 @@
-#include "Server.hpp"
-#include <cstdlib>
-#include <iostream>
+#include "ircserver.hpp"
 
-int main(int ac, char **av) {
+int main(int ac, char **av) 
+{
   if (ac != 3) {
     std::cerr << "Usage: ./ircserv <port> <password>" << std::endl;
     return 1;

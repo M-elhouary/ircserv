@@ -8,9 +8,10 @@
 void Server::acceptClient(int server_fd) {
   struct sockaddr_in client_addr;
   socklen_t addrlen = sizeof(client_addr);
-
+  
   int client_fd =
-      accept(server_fd, reinterpret_cast<sockaddr *>(&client_addr), &addrlen);
+  accept(server_fd, reinterpret_cast<sockaddr *>(&client_addr), &addrlen);
+  std::cout << client_addr.sin_addr.s_addr << std::endl;  
 
   if (client_fd < 0) {
     if (errno != EAGAIN && errno != EWOULDBLOCK)

@@ -16,6 +16,7 @@
 #include "Channel.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include <sstream>
 
 class Server {
 public:
