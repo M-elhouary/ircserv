@@ -12,7 +12,6 @@ void Server::acceptClient(int server_fd) {
   
   int client_fd =
   accept(server_fd, reinterpret_cast<sockaddr *>(&client_addr), &addrlen);
-  std::cout << client_addr.sin_addr.s_addr << std::endl;  
 
   if (client_fd < 0)
         return;
@@ -31,7 +30,6 @@ void Server::acceptClient(int server_fd) {
 
   clients[client_fd] = new Client(client_fd);
   clients[client_fd]->setHostname(client_addr);
-  std::cout << clients[client_fd]->getHostname() << std::endl;
 
   std::cout << "New client connected (fd = " << client_fd << ")" << std::endl;
 }
