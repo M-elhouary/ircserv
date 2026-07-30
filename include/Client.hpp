@@ -12,6 +12,7 @@ class Client {
         std::string sendBuffer;
         std::string _nickname;
         std::string _username;
+        std::string _hostname;
         bool        _authenticated;
         bool        _nicknameReceived;
         bool        _registred;
@@ -25,6 +26,7 @@ class Client {
         void setAutenticated(bool _authenticate);
         void setNickNameReceived(bool _nicknameReceived);
         void setRegistred(bool _registred);
+        void set_hostname(struct sockaddr_in client_addr);
         bool getWelcomeSent() const;
         void setWelcomeSent(bool value);
         bool getAutenticated();
@@ -32,6 +34,7 @@ class Client {
         std::string getUserName();
 
         int getFd() const;
+        std::string get_hostname() const;
 
         const std::string &getRecvBuffer() const;
         std::string &getRecvBufferRef();

@@ -2,6 +2,7 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <iostream>
+#include <ostream>
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -28,6 +29,8 @@ void Server::acceptClient(int server_fd) {
   pfds.push_back(pfd);
 
   clients[client_fd] = new Client(client_fd);
+  clients[client_fd]->set_hostname(client_addr);
+  std::cout << clients[client_fd]->get_hostname() << std::endl;
 
   std::cout << "New client connected (fd = " << client_fd << ")" << std::endl;
 }
