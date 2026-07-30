@@ -2,6 +2,7 @@
 #define SERVER_HPP
 
 #include <cerrno>
+#include <csignal>
 #include <map>
 #include <poll.h>
 #include <string>
@@ -17,6 +18,8 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 #include <sstream>
+
+extern volatile sig_atomic_t g_stop_server;
 
 class Server {
 public:

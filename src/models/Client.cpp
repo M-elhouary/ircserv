@@ -38,6 +38,11 @@ bool Client::getWelcomeSent() const
     return this->_welcomeSent;
 }
 
+std::string Client::get_hostname() const
+{
+    return this->_hostname;
+}
+
 void Client::setWelcomeSent(bool value)
 {
     this->_welcomeSent = value;
@@ -66,6 +71,10 @@ void Client::setRegistred(bool _registred)
     this->_registred = _registred;
 }
 
+void Client::set_hostname(struct sockaddr_in client_addr) {
+  _hostname = inet_ntoa(client_addr.sin_addr);
+}
+
 bool Client::isRegistred() const
 {
     return (this->_nicknameReceived && this->_authenticated && this->_registred);
@@ -85,25 +94,4 @@ bool Client::hasPendingSend() const
     return !sendBuffer.empty();
 }
 
-int Client::flushSendBuffer()
-{
-    std::cout << "[DBUG]:[fd=" << _fd << "] sendBuffer: " << sendBuffer << std::endl;
-    if (sendBuffer.empty())
-        return 0;
-    int ret = send(_fd, sendBuffer.c_str(), sendBuffer.size(), 0);
-    if (ret > 0) {
-        sendBuffer.erase(0, ret);
-        return ret;
-    }
-    return 0;
-}
-
 Client::~Client() {}
-
-const std::string &Client::getRecvBuffer() const { return recv_buffer; }
-
-std::string &Client::getRecvBufferRef() { return recv_buffer; }
-
-void Client::appendToRecvBuffer(const std::string &data) { recv_buffer += data; }
-
-void Client::consumeFromRecvBuffer(size_t n) { recv_buffer.erase(0, n); }
