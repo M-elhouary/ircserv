@@ -1,5 +1,4 @@
-#include "Server.hpp"
-#include <cerrno>
+#include "../../include/Server.hpp"
 #include <iostream>
 #include <sys/socket.h>
 
@@ -16,8 +15,6 @@ bool Server::handleClientData(int fd) {
   int bytes = recv(fd, buf, sizeof(buf) - 1, 0);
 
   if (bytes <= 0) {
-    if (bytes < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))
-      return false;
     disconnectClient(fd);
     return true;
   }

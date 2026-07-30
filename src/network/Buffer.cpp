@@ -1,20 +1,9 @@
 #include "ircserver.hpp"
 
-void Server::processClientBuffer(Client *client) {
-  std::string &buffer = client->getRecvBufferRef();
+const std::string &Client::getRecvBuffer() const { return recv_buffer; }
 
-  size_t pos;
-  while ((pos = buffer.find('\n')) != std::string::npos) {
-    std::string line = buffer.substr(0, pos);
-    client->consumeFromRecvBuffer(pos + 1);
+std::string &Client::getRecvBufferRef() { return recv_buffer; }
 
-    if (!line.empty() && line[line.size() - 1] == '\r')
-      line.erase(line.size() - 1);
+void Client::appendToRecvBuffer(const std::string &data) { recv_buffer += data; }
 
-    if (line.empty())
-      continue;
-
-    std::cout << "[DBUG]:[fd=" << client->getFd() << "] recvBuffer: " << line << std::endl;
-    dispatch(*client, line, *this);
-  }
-}
+void Client::consumeFromRecvBuffer(size_t n) { recv_buffer.erase(0, n); }
