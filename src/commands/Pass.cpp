@@ -3,11 +3,6 @@
 
 void handlePass(Client &client, IRCMessage &msg, Server &server)
 {
-    if (client.getAutenticated())
-    {
-        client.sendMessage(":ircserv 462 * :You may not reregister\r\n");
-        return ;
-    }
 
     if(msg.params.empty())
     {

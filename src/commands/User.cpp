@@ -17,7 +17,7 @@ void handleUser(Client &client, IRCMessage &msg, Server &server)
         client.sendMessage(":ircserv 461 * :Not enough parameters\r\n");
         return;
     }
-    if(client.getNickNameReceived())
+    if(!client.getNickNameReceived())
     {
         client.sendMessage(":ircserv 451 * :You have not registered\r\n");
         return ;
