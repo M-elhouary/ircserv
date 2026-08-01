@@ -15,7 +15,7 @@ void Server::run() {
       if (pfds[i].revents == 0)
         continue;
 
-      if (pfds[i].revents & (POLLHUP | POLLERR | POLLNVAL)) {
+      if (pfds[i].revents & (POLLHUP | POLLERR)) {
         if (pfds[i].fd != server_sock) {
           disconnectClient(pfds[i].fd);
           i--;

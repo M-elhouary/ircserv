@@ -7,18 +7,6 @@ Server::Server(int port, const std::string &password) {
   running = false;
 }
 
-Server::Server(const Server &other)
-    : port(other.port), password(other.password), server_sock(-1),
-      running(false) {}
-
-Server &Server::operator=(const Server &other) {
-  if (this != &other) {
-    port = other.port;
-    password = other.password;
-  }
-  return *this;
-}
-
 Server::~Server() { cleanup(); }
 
 const std::string &Server::getPassword() const { return password; }
