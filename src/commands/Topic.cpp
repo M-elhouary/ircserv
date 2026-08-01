@@ -53,6 +53,7 @@ void handleTopic(Client &client, IRCMessage &msg, Server &server)
     }
     // set the new topic and broadcast it to all clients in the channel
     channel->setTopic(msg.params[1]);
+    client.sendMessage(":ircserv 332 " + client.getNickName() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");   
     std::string message = ":" + client.getNickName() + " TOPIC " + channel->getName() + " :" + msg.params[1] + "\r\n";
     channel->broadcast(message, &client);
 }
