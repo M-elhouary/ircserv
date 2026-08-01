@@ -9,9 +9,15 @@ void handlePass(Client &client, IRCMessage &msg, Server &server)
         client.sendMessage(":ircserv 461 * :Not enough parameters\r\n");
         return ;
     }
+    if(client.getPasswordReceived())
+    {
+        client.sendMessage(":ircserv 462 * :You may not reregister\r\n");
+        return ;
+    }
     if(msg.params[0] == server.getPassword())
     {
         client.setAutenticated(true);
+        client.setPasswordReceived(true);
         return;
     }
     client.sendMessage(":ircserv 464 * :Password incorrect\r\n");

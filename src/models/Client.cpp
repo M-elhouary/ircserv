@@ -7,7 +7,8 @@ Client::Client(int fd)
  _authenticated(false),
   _nicknameReceived(false), 
   _registred(false),
-   _welcomeSent(false) 
+   _welcomeSent(false),
+   _passwordReceived(false)
 {
     
 }
@@ -46,6 +47,18 @@ std::string Client::getHostname() const
 bool Client::getNickNameReceived() const
 {
     return this->_nicknameReceived;
+}
+
+bool Client::getPasswordReceived() const
+{
+    return this->_passwordReceived;
+}
+
+
+
+void Client::setPasswordReceived(bool value)
+{
+    this->_passwordReceived = value;
 }
 
 

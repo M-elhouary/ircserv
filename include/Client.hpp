@@ -16,6 +16,7 @@ class Client {
         bool        _nicknameReceived;
         bool        _registred;
         bool        _welcomeSent;
+        bool       _passwordReceived;
 
     public:
         Client(int fd);
@@ -27,9 +28,11 @@ class Client {
         void setRegistred(bool _registred);
         void setHostname(struct sockaddr_in client_addr);
         void setWelcomeSent(bool value);
+        void setPasswordReceived(bool value);
         bool getWelcomeSent() const;
         bool getNickNameReceived() const;
         bool getAutenticated();
+        bool getPasswordReceived() const;
         std::string getNickName();
         std::string getUserName();
 
