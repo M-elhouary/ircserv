@@ -19,7 +19,11 @@ void handleTopic(Client &client, IRCMessage &msg, Server &server)
         client.sendMessage(":ircserv 451 * :You have not registered\r\n");
         return;
     }
-
+    if (msg.params.empty())
+    {
+        client.sendMessage(":ircserv 461 * :Not enough parameters\r\n");
+        return;
+    }
     // channel validation
     Channel *channel = server.getChannel(msg.params[0]);
     if (channel == NULL)

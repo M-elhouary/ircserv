@@ -12,7 +12,7 @@ void handleUser(Client &client, IRCMessage &msg, Server &server)
         return ;
     }
 
-    if(msg.params.empty())
+    if(msg.params.size() < 4 ||  msg.params[0].empty() || msg.params[1].empty() || msg.params[2].empty() || msg.params[3].empty())
     {
         client.sendMessage(":ircserv 461 * :Not enough parameters\r\n");
         return;
