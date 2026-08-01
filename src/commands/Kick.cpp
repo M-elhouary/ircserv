@@ -15,11 +15,6 @@ void handelTarget(Channel *channel, IRCMessage &msg, Client &client)
 {
     if (channel->isAMemberInChannel(msg.params[1]))
     {
-        channel->removeClient(msg.params[1]);
-        if (channel->isOperator(msg.params[1]))
-        {
-            channel->removeOperator(msg.params[1]);
-        }
         std::string reson = " ";
         if(msg.params.size() > 2)
         {
@@ -27,6 +22,12 @@ void handelTarget(Channel *channel, IRCMessage &msg, Client &client)
         }
         std::string message = ":" + client.getNickName() + " KICK " + channel->getName() + " " + msg.params[1] + " :" + reson + "\r\n";
         channel->broadcast(message, &client);
+        client.sendMessage(message);
+        channel->removeClient(msg.params[1]);
+        if (channel->isOperator(msg.params[1]))
+        {
+            channel->removeOperator(msg.params[1]);
+        }
         return;
     }
     else
