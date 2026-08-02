@@ -31,11 +31,11 @@ void handleTopic(Client &client, IRCMessage &msg, Server &server)
         client.sendMessage(":ircserv 403 * :No such channel\r\n");
         return;
     }
-    if (!channel->isClientInChannel(&client))
-    {
-        client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
-        return;
-    }
+    // if (!channel->isClientInChannel(&client))
+    // {
+    //     client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
+    //     return;
+    // }
     // if no topic is provided, send the current topic
     if (msg.params.size() == 1)
     {
@@ -52,8 +52,17 @@ void handleTopic(Client &client, IRCMessage &msg, Server &server)
         return;
     }
     // set the new topic and broadcast it to all clients in the channel
-    channel->setTopic(msg.params[1]);
-    client.sendMessage(":ircserv 332 " + client.getNickName() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");   
-    std::string message = ":" + client.getNickName() + " TOPIC " + channel->getName() + " :" + msg.params[1] + "\r\n";
-    channel->broadcast(message, &client);
+
+    if (channel->isAMemberInChannel(client.getNickName()))
+    {
+        channel->setTopic(msg.params[1]);
+        client.sendMessage(":ircserv 332 " + client.getNickName() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");
+        std::string message = ":" + client.getNickName() + " TOPIC " + channel->getName() + " :" + msg.params[1] + "\r\n";
+        channel->broadcast(message, &client);
+    }
+    else
+    {
+        client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
+        return;
+    }
 }

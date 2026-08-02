@@ -138,6 +138,7 @@ void handleJoin(Client &client, IRCMessage &msg, Server &server)
             names += " ";
 
     }
+    // send the member list to the joining client
     client.sendMessage(":ircserv 353 " + client.getNickName() + " = " + channel->getName() + " :" + names + "\r\n");
 
     // 366 RPL_ENDOFNAMES

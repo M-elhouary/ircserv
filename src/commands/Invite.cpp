@@ -27,7 +27,6 @@ bool handlTarget(Channel *channel, IRCMessage &msg, Client &client, Server &serv
 
             std::string messageToInveter = ":ircserv 341 " + client.getNickName() + " " + it->second->getNickName() + " " + channel->getName() + "\r\n";
             client.sendMessage(messageToInveter);
-
             return true;
         }
     }

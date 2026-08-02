@@ -200,11 +200,11 @@ void handleMode(Client &client, IRCMessage &msg, Server &server)
         return;
     }
 
-    if (!Channel->isClientInChannel(&client))
-    {
-        client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
-        return;
-    }
+    // if (!Channel->isClientInChannel(&client))
+    // {
+    //     client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
+    //     return;
+    // }
 
     if (msg.params.size() == 1)
     {
