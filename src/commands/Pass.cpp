@@ -18,6 +18,7 @@ void handlePass(Client &client, IRCMessage &msg, Server &server)
     {
         client.setAutenticated(true);
         client.setPasswordReceived(true);
+        tryCompleteRegistration(client);
         return;
     }
     client.sendMessage(":ircserv 464 * :Password incorrect\r\n");

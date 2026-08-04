@@ -24,7 +24,8 @@ void Server::processClientBuffer(Client *client) {
       disconnectClient(client->getFd());
       return;
     }
-
+    std::cout << "Received from fd=" << client->getFd() << ": " << line
+              << std::endl;
     dispatch(*client, line, *this);
   }
 }
