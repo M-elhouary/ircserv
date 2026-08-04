@@ -48,8 +48,6 @@ void Server::run() {
       }
     }
 
-    // Arm POLLOUT for every client with buffered output (e.g. broadcast
-    // recipients), otherwise their queued data would never be flushed.
     for (size_t j = 0; j < pfds.size(); j++) {
       if (pfds[j].fd == server_sock)
         continue;
@@ -58,6 +56,4 @@ void Server::run() {
         pfds[j].events |= POLLOUT;
     }
   }
-
-  cleanup();
 }
