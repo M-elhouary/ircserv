@@ -40,8 +40,13 @@ void handleTopic(Client &client, IRCMessage &msg, Server &server)
         client.sendMessage(":ircserv 482 * :You're not channel operator\r\n");
         return;
     }
+    if(!channel->isOperator(client.getNickName()))
+    {
+        client.sendMessage(":ircserv 482 * :You're not channel operator\r\n");
+        return;
+    }
 
-    if (channel->isAMemberInChannel(client.getNickName()))
+    if (channel->isAMemberInChannel(client.getNickName()) && channel->isOperator(client.getNickName()))
     {
         channel->setTopic(msg.params[1]);
         client.sendMessage(":ircserv 332 " + client.getNickName() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");
