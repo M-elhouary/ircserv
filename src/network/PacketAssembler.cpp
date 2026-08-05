@@ -10,10 +10,7 @@ void Server::processClientBuffer(Client *client) {
 
     client->consumeFromRecvBuffer(pos + 1);
 
-    if (!line.empty() && line[line.size() - 1] == '\r')
-      line.erase(line.size() - 1);
-
-    if (line.empty())
+    if (line.empty() || (line.size() == 1 && line[0] == '\r'))
       continue;
 
     if (line.size() + 2 > 512) {
