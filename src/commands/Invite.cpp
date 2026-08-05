@@ -1,15 +1,6 @@
 #include "ircserver.hpp"
 
-// src/commands/Invite.cpp
-// └── void handleInvite(Client& client, IRCMessage& msg, Server& server)
-//     ├── check: isRegistred()              → 451
-//     ├── check: params exist               → 461
-//     ├── find channel                      → 403
-//     ├── client in channel?                → 442
-//     ├── client is operator?               → 482
-//     ├── find target by nickname           → 401
-//     ├── channel.addToInviteList(target)
-//     └── send INVITE to target
+
 
 bool handlTarget(Channel *channel, IRCMessage &msg, Client &client, Server &server)
 {

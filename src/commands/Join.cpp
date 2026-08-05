@@ -80,20 +80,16 @@ void handleJoin(Client &client, IRCMessage &msg, Server &server)
 
         client.sendMessage(":" + client.getNickName() + "!" + client.getUserName() + "@" + client.getHostname() + " JOIN " + newChannel->getName() + "\r\n");
 
-        // 353 RPL_NAMREPLY — first member is operator, prefix with @
         client.sendMessage(":ircserv 353 " + client.getNickName() + " = " + newChannel->getName() + " :@" + client.getNickName() + "\r\n");
        
-        // :ircserv 331 alice #general :No topic is set
         client.sendMessage(":ircserv 331 " + client.getNickName() + " " + newChannel->getName() + " :No topic is set\r\n");
 
-        // 366 RPL_ENDOFNAMES
         client.sendMessage(":ircserv 366 " + client.getNickName() + " " + newChannel->getName() + " :End of /NAMES list\r\n");
         return;
     }
 
     Channel *channel = it->second;
 
-    // check if the client alreay in this channel
     if (channel->isClientInChannel(&client))
     {
         client.sendMessage(":ircserv 443 * " + channel->getName() + " :is already on channel\r\n");
@@ -120,13 +116,10 @@ void handleJoin(Client &client, IRCMessage &msg, Server &server)
 
     channel->addClient(&client);
     client.sendMessage(":" + client.getNickName() + "!" + client.getUserName() + "@" + client.getHostname() + " JOIN " + channel->getName() + "\r\n");
-    // broadcast the join message to all clients in the channel except the joining client   
     server.getChannel(channel->getName())->broadcast(":" + client.getNickName() + "!" + client.getUserName() + "@" + client.getHostname() + " JOIN " + channel->getName() + "\r\n", &client);
-    // 332 RPL_TOPIC — send topic if channel has one
      if (!channel->getTopic().empty())
         client.sendMessage(":ircserv 332 " + client.getNickName() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");
 
-    // 353 RPL_NAMREPLY — build member list, @ prefix for operators
     std::string names = "";
     std::vector<Client *> members = channel->getMembers();
     for (size_t i = 0; i < members.size(); i++)
@@ -138,9 +131,7 @@ void handleJoin(Client &client, IRCMessage &msg, Server &server)
             names += " ";
 
     }
-    // send the member list to the joining client
     client.sendMessage(":ircserv 353 " + client.getNickName() + " = " + channel->getName() + " :" + names + "\r\n");
 
-    // 366 RPL_ENDOFNAMES
     client.sendMessage(":ircserv 366 " + client.getNickName() + " " + channel->getName() + " :End of /NAMES list\r\n");
 }

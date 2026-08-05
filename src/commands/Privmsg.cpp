@@ -1,25 +1,11 @@
 #include "ircserver.hpp"
 
-// src/commands/Privmsg.cpp
-// └── void handlePrivmsg(Client& client, IRCMessage& msg, Server& server)
-//     ├── check: client.isRegistred()       → 451
-//     ├── check: params exist               → 461
-//     ├── target is channel (#)?
-//     │   ├── find channel                  → 403
-//     │   ├── client in channel?            → 404
-//     │   └── channel.broadcast(message, client)
-//     └── target is user?
-//         ├── find client by nickname       → 401
-//         └── target.sendMessage(message)
-
 
 std::string BuildPrivmsgMessage(Client &client, std::string &target, std::string &message)
 {
     std::string msg = ":" + client.getNickName() + " PRIVMSG " + target + " :" + message + "\r\n";
     return msg;
 }
-
-
 
 void MsgTochannel(Client &client, IRCMessage &msg, Server &server)
 {
@@ -75,6 +61,4 @@ void handlePrivmsg(Client &client, IRCMessage &msg, Server &server)
     {
         MsgToClient(client, msg, server);   
     }
-
-
 }

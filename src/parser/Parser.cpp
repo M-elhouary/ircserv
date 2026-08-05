@@ -1,6 +1,5 @@
 #include "ircserver.hpp"
 
-// remove \r\\n from the end of the line
 void Parser::stripCRLF(std::string &line)
 {
   if (!line.empty() && line[line.size() - 1] == '\n')
@@ -46,7 +45,6 @@ void Parser::extractCommand(const std::string &line, IRCMessage &msg,
     else
     {
       msg.command = line.substr(pos);
-      // std::cout << "Command: " << msg.command << std::endl;
       pos = line.size();
     }
   }

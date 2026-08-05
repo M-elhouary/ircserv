@@ -3,12 +3,12 @@
 Channel::Channel(std::string channelName)
 {
     _channelName = channelName;
-    _topic = "";    // topic mean the subject of the channel
-    _password = ""; // channel key
+    _topic = "";   
+    _password = ""; 
     _userLimit = 0;
     _isClientInvited = false;
-    _inviteOnly = false;      // for invite-only channels
-    _topicRestricted = false; // for channels where only operators can change the topic
+    _inviteOnly = false;     
+    _topicRestricted = false; 
 };
 
 Channel::~Channel() {};

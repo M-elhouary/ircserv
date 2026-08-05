@@ -1,12 +1,5 @@
 #include "ircserver.hpp"
 
-// src/commands/Mode.cpp
-// └── void handleMode(Client& client, IRCMessage& msg, Server& server)
-//     ├── check: isRegistred()              → 451
-//     ├── find channel                      → 403
-//     ├── client is operator?               → 482
-//     ├── parse mode string (+i -i +t -t +k -k +o -o +l -l)
-//     └── apply each mode change
 
 void handleCurrentMode(Client &client, Channel *Channel)
 {
@@ -68,7 +61,6 @@ void AddMode(Channel *Channel, Client &client, IRCMessage &msg, Server &server)
         {
             Channel->setTopicRestricted(true);
             Channel->broadcast(":" + client.getNickName() + " MODE " + Channel->getName() + " +t\r\n", &client);
-
         }
         else if (msg.params[1][i] == 'k')
         {
@@ -91,7 +83,7 @@ void AddMode(Channel *Channel, Client &client, IRCMessage &msg, Server &server)
             int limit = 0;
             ss >> limit;
             Channel->setUserLimit(limit);
-            Channel->broadcast(":" + client.getNickName() + " MODE " + Channel->getName() + " +l\r\n", &client);    
+            Channel->broadcast(":" + client.getNickName() + " MODE " + Channel->getName() + " +l\r\n", &client);
         }
         else if (msg.params[1][i] == 'o')
         {
@@ -115,12 +107,10 @@ void AddMode(Channel *Channel, Client &client, IRCMessage &msg, Server &server)
         }
         else
         {
-client.sendMessage(":ircserv 501 * :Unknown MODE flag\r\n");
-                return;
+            client.sendMessage(":ircserv 501 * :Unknown MODE flag\r\n");
+            return;
         }
     }
-    
-
 }
 
 void DesactiveMode(Channel *Channel, Client &client, IRCMessage &msg)
@@ -136,8 +126,7 @@ void DesactiveMode(Channel *Channel, Client &client, IRCMessage &msg)
         else if (msg.params[1][i] == 't')
         {
             Channel->setTopicRestricted(false);
-            Channel->broadcast(":" + client.getNickName() + " MODE " + Channel->getName() + " -t\r\n", &client);    
-
+            Channel->broadcast(":" + client.getNickName() + " MODE " + Channel->getName() + " -t\r\n", &client);
         }
         else if (msg.params[1][i] == 'k')
         {
@@ -157,8 +146,7 @@ void DesactiveMode(Channel *Channel, Client &client, IRCMessage &msg)
         else if (msg.params[1][i] == 'l')
         {
             Channel->setUserLimit(0);
-            Channel->broadcast(":" + client.getNickName() + " MODE " + Channel->getName() + " -l\r\n", &client);    
-
+            Channel->broadcast(":" + client.getNickName() + " MODE " + Channel->getName() + " -l\r\n", &client);
         }
         else if (msg.params[1][i] == 'o')
         {
@@ -168,16 +156,14 @@ void DesactiveMode(Channel *Channel, Client &client, IRCMessage &msg)
                 return;
             }
             Channel->removeOperator(msg.params[2]);
-            Channel->broadcast(":" + client.getNickName() + " MODE " + Channel->getName() + " -o " + msg.params[2] + "\r\n", &client);  
-
+            Channel->broadcast(":" + client.getNickName() + " MODE " + Channel->getName() + " -o " + msg.params[2] + "\r\n", &client);
         }
         else
         {
-client.sendMessage(":ircserv 501 * :Unknown MODE flag\r\n");
-                return;
+            client.sendMessage(":ircserv 501 * :Unknown MODE flag\r\n");
+            return;
         }
     }
-    
 }
 
 void handleMode(Client &client, IRCMessage &msg, Server &server)
@@ -200,11 +186,11 @@ void handleMode(Client &client, IRCMessage &msg, Server &server)
         return;
     }
 
-    // if (!Channel->isClientInChannel(&client))
-    // {
-    //     client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
-    //     return;
-    // }
+    if (!Channel->isClientInChannel(&client))
+    {
+        client.sendMessage(":ircserv 442 * :You're not on that channel\r\n");
+        return;
+    }
 
     if (msg.params.size() == 1)
     {
@@ -221,8 +207,8 @@ void handleMode(Client &client, IRCMessage &msg, Server &server)
         }
         if (msg.params[1][0] != '+' && msg.params[1][0] != '-')
         {
-client.sendMessage(":ircserv 501 * :Unknown MODE flag\r\n");
-                return;
+            client.sendMessage(":ircserv 501 * :Unknown MODE flag\r\n");
+            return;
         }
 
         if (msg.params[1][0] == '+')
