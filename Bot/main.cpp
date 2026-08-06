@@ -3,6 +3,14 @@
 #include <cstdlib>
 #include <ctime>
 
+
+static std::string ft_parce_host(std::string host)
+{
+  if (host == "localhost")
+    return "127.0.0.1";
+  return host;
+}
+
 int main(int argc, char **argv)
 {
     if (argc != 4)
@@ -11,10 +19,12 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    std::string host = ft_parce_host(argv[1]);
+
     std::srand(static_cast<unsigned>(std::time(NULL)));
     try
     {
-        Bot bot(argv[1], std::atoi(argv[2]), argv[3]);
+        Bot bot(host, std::atoi(argv[2]), argv[3]);
 
         bot.connectToServer();
         bot.login("QuoteBot", "Programming Quote Bot");
