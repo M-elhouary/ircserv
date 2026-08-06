@@ -1,6 +1,5 @@
-#include "../../include/Server.hpp"
-#include <iostream>
-#include <sys/socket.h>
+#include "ircserver.hpp"
+
 
 static const size_t MAX_RECV_BUFFER = 8192;
 

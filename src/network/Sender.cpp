@@ -1,5 +1,4 @@
 #include "ircserver.hpp"
-#include <sys/socket.h>
 
 int Client::flushSendBuffer()
 {

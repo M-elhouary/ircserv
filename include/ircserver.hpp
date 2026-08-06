@@ -5,6 +5,17 @@
 #include <string>
 #include <vector>
 #include <cstdio>
+#include <csignal>
+#include <iostream>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <ostream>
+#include <sys/socket.h>
+#include <iostream>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+
 
 #include "Channel.hpp"
 #include "Client.hpp"

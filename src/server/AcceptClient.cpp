@@ -1,10 +1,4 @@
-#include "../../include/Server.hpp"
-#include <arpa/inet.h>
-#include <fcntl.h>
-#include <iostream>
-#include <ostream>
-#include <sys/socket.h>
-#include <unistd.h>
+#include "ircserver.hpp"
 
 void Server::acceptClient(int server_fd) {
   struct sockaddr_in client_addr;

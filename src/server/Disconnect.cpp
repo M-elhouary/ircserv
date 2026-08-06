@@ -1,6 +1,5 @@
-#include "../../include/Server.hpp"
-#include <iostream>
-#include <unistd.h>
+#include "ircserver.hpp"
+
 
 void Server::disconnectClient(int fd) {
   std::cout << "Client disconnected (fd = " << fd << ")" << std::endl;

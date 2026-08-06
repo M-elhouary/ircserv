@@ -1,7 +1,5 @@
 #include "ircserver.hpp"
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <unistd.h>
+
 
 void Server::setupSocket() {
   server_sock = socket(AF_INET, SOCK_STREAM, 0);
