@@ -12,7 +12,6 @@ int main(int argc, char **argv)
     }
 
     std::srand(static_cast<unsigned>(std::time(NULL)));
-
     try
     {
         Bot bot(argv[1], std::atoi(argv[2]), argv[3]);
