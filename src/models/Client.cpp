@@ -1,5 +1,4 @@
-#include "../../include/ircserver.hpp"
-#include <sys/socket.h>
+#include "ircserver.hpp"
 
 Client::Client(int fd)
  : _fd(fd), _nickname(""), 
@@ -13,22 +12,29 @@ Client::Client(int fd)
     
 }
 
+
+
+// Destructor for the Client class. Cleans up any resources associated with the client.
 int Client::getFd() const
 {
     return this->_fd;
 }
 
+// Returns a flag for check if the client has sent a nickname
 std::string Client::getNickName()
 {
     return this->_nickname;
 }
 
+
+// flag for check if the client has sent a username
 std::string Client::getUserName()
 {
     return this->_username;
 }
 
-
+// flag for check if the client has sent a password 
+// 
 bool Client::getAutenticated()
 {
     return this->_authenticated;

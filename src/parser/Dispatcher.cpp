@@ -28,3 +28,4 @@ void dispatch(Client &client, const std::string &line, Server &server)
     else
         client.sendMessage(":ircserv 421 * :Unknown command\r\n"); // Send an error message for unknown commands
 }
+    

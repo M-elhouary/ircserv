@@ -1,18 +1,10 @@
 #include "ircserver.hpp"
 
-
+// for 
 void Server::setupSocket() {
   server_sock = socket(AF_INET, SOCK_STREAM, 0);
   if (server_sock < 0) {
     std::cerr << "Error: socket() failed" << std::endl;
-    exit(1);
-  }
-
-  int optval = 1;
-  if (setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR, &optval,
-                 sizeof(optval)) < 0) {
-    std::cerr << "Error: setsockopt() failed" << std::endl;
-    close(server_sock);
     exit(1);
   }
 
